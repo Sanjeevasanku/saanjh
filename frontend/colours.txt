@@ -1,0 +1,16 @@
+back ground colour : #4daea3  OR  #6fbec3   
+maybe button : #1c7166
+
+same colour palatte
+#aacecb
+#aed9d3
+
+
+mongodb: sanjeevasanku2gmail.com
+password : Bablu_05
+
+atlas : sanjeevasanku
+password : VaQkpWraTQVVrgmj
+
+
+mongodb string : mongodb+srv://sanjeevasanku:Bablu_05@cluster0.n00otbs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
