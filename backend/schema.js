@@ -9,9 +9,9 @@ patientSchema = new mongoose.Schema({
     birthDate: Date,
     gender: String,
     bloodGroup: String,
-    file : Object
+    // file : Object
 })
 
-const patient = mongoose.model('patient', patientSchema);
+const patient = mongoose.model('old', patientSchema);
 
 module.exports = {patient}

@@ -1,8 +1,13 @@
 const express = require('express');
 const router = require('express').Router();
 const {addPatient} = require('../backend/controllers/functions.js')
+const {getPatients,getpatientdetails,uploadpatient,getfiles} = require('../backend/controllers/get_set.js')
 // const {addPatient} = require('../backend/controllers/pdfs.js')
-router.post('/addpatient', addPatient);
+// router.post('/addpatient', addPatient);
+router.post('/uploadpatient', uploadpatient);
+router.get('/getpatients', getPatients);
+router.get('/getpatientdetails', getpatientdetails);
+
 // const { addPatient } = require('./path-to-addPatient'); // Ensure the path is correct
 
 // module.exports = (app) => {

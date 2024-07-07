@@ -34,7 +34,7 @@ const AddPatient = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission logic here
-        const response = await axios.post("/en/addpatient", formData);
+        const response = await axios.post("/en/uploadpatient", formData);
         const data=response.data;
         alert(data)
 
