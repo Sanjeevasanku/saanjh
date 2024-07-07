@@ -1,10 +1,22 @@
 import React from 'react'
 // import Navigationvar from './Navigationvar'
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import Logo from "../Assets/Logo.svg";
+import axios from 'axios';
 
 export default function PatientDetails() {
+    const[patient, setPatient]=useState(null)
+    const { id } = useParams();
+    useEffect(()=>{
+        const function1 = async() => {
+            const response=await axios.get(`/en/getpatientdetails?id=${id}`)
+            setPatient(response.data[0])
+        }
+        function1();
+    },[id])
+
     // const [pdf,setPdf]=useState();
     // const handlefileupload=(e)=>
     //     {
@@ -23,20 +35,18 @@ export default function PatientDetails() {
     //         }
 
     //     }
-    const patient = [
-        {
-            p_id: "22BD1A057D",
-            s_no: 1,
-            fullName: "Sanjana Pendem",
-            age: 20,
-            email: "sanjana@gmail.com",
-            phoneNumber: 9390131295,
-            birthDate: "15-12-2004",
-            bloodGroup: "B+",
-            gender: "Female",
+    // const patient = [
+    //     {
+    //         fullName: "Sanjana Pendem",
+    //         age: 20,
+    //         email: "sanjana@gmail.com",
+    //         phoneNumber: 9390131295,
+    //         birthDate: "15-12-2004",
+    //         bloodGroup: "B+",
+    //         gender: "Female",
 
-        },
-    ];
+    //     },
+    // ];
 
     const navigate = useNavigate();
 
@@ -164,18 +174,19 @@ export default function PatientDetails() {
                     </button>
                 </div>
                 <main class="details-main">
-                    {patient.map((data) => (
+                    {patient && 
                         <section className="d-patient-details">
                             <h2 class="d-h2">Patient Information</h2>
-                            <p class="d-p"><strong>Name:</strong> {data.fullName}</p>
-                            <p class="d-p"><strong>Email:</strong> {data.email}</p>
-                            <p class="d-p"><strong>Phone Number:</strong> {data.phoneNumber}</p>
-                            <p class="d-p"><strong>Date of Birth:</strong> {data.birthDate}</p>
+                            <p class="d-p"><strong>Id:</strong> {patient._id}</p>
+                            <p class="d-p"><strong>Name:</strong> {patient.fullName}</p>
+                            <p class="d-p"><strong>Email:</strong> {patient.email}</p>
+                            <p class="d-p"><strong>Phone Number:</strong> {patient.phoneNumber}</p>
+                            <p class="d-p"><strong>Date of Birth:</strong> {patient.birthDate}</p>
                             {/* <p class="d-p"><strong>Age:</strong> {patient.age}</p> */}
-                            <p class="d-p"><strong>Gender:</strong> {data.gender}</p>
-                            <p class="d-p"><strong>Blood group:</strong> {data.bloodGroup}</p>
+                            <p class="d-p"><strong>Gender:</strong> {patient.gender}</p>
+                            <p class="d-p"><strong>Blood group:</strong> {patient.bloodGroup}</p>
                         </section>
-                    ))}
+                    }
                     <section className="d-predicted-risks">
                         <h2 class="d-h2">Predicted Risks</h2>
                         <ul class="d-ul">

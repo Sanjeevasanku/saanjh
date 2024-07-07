@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const path = require('path');
 const { MongoClient, GridFSBucket } = require("mongodb");
 
 const approutes = require("./AllRoutes")
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'build')));
 
 const mongoURL = process.env.MONGO_URL;
 
@@ -37,10 +39,17 @@ mongoose.connect(mongoURL,
 // const upload = require('../backend/controllers/upload.js'); // Ensure the path is correct
 
 // require('./AllRoutes')(app); // Correct path to your route handler
+app.get("/",(req,res)=>{
+  res.sendFile(path.resolve(__dirname, './build', 'index.html'));
+})
 
 app.use('/en', approutes)
 
 const PORT = process.env.PORT;
+
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, './build', 'index.html'));
+});
 
 app.listen(PORT, ()=>{
   console.log(`Server is running on port ${PORT}`)
