@@ -7,15 +7,16 @@ import Logo from "../Assets/Logo.svg";
 import axios from 'axios';
 
 export default function PatientDetails() {
-    const[patient, setPatient]=useState(null)
+    const [patient, setPatient] = useState(null)
     const { id } = useParams();
-    useEffect(()=>{
-        const function1 = async() => {
-            const response=await axios.get(`/en/getpatientdetails?id=${id}`)
+    const [file, setFile] = useState
+    useEffect(() => {
+        const function1 = async () => {
+            const response = await axios.get(`/en/getpatientdetails?id=${id}`)
             setPatient(response.data[0])
         }
         function1();
-    },[id])
+    }, [id])
 
     // const [pdf,setPdf]=useState();
     // const handlefileupload=(e)=>
@@ -53,6 +54,11 @@ export default function PatientDetails() {
     const handleBack = () => {
         navigate('/caretaker');
     };
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        setSize
+    }
 
     return (
         // <div>
@@ -155,15 +161,15 @@ export default function PatientDetails() {
         // </div>
         <div>
             <nav className='doctor-nav'>
-                    <div className="nav-logo-container">
-                        <img src={Logo} alt="" />
-                    </div>
-                    <div className="navbar-links-container">
-                        <a href="/">Home</a>
-                        <a href="">About us</a>
-                        <a href="">Contact</a>
-                    </div>
-                </nav>
+                <div className="nav-logo-container">
+                    <img src={Logo} alt="" />
+                </div>
+                <div className="navbar-links-container">
+                    <a href="/">Home</a>
+                    <a href="">About us</a>
+                    <a href="">Contact</a>
+                </div>
+            </nav>
             <div className="details">
                 <header className="details-header">
                     <h1>Patient Details</h1>
@@ -174,7 +180,7 @@ export default function PatientDetails() {
                     </button>
                 </div>
                 <main class="details-main">
-                    {patient && 
+                    {patient &&
                         <section className="d-patient-details">
                             <h2 class="d-h2">Patient Information</h2>
                             <p class="d-p"><strong>Id:</strong> {patient._id}</p>
@@ -203,6 +209,13 @@ export default function PatientDetails() {
                         ))} */}
                         </ul>
                     </section>
+                    <input
+                        type="file"
+                        class="form-control"
+                        accept="application/pdf"
+                        // onChange={(e) => setFile(e.target.files[0])}
+                        onChange={handleFileChange}
+                    />
                 </main>
             </div>
         </div>
