@@ -12,7 +12,7 @@ router.get('/pdfid/:id',pdfid);
 router.get('/getdates/:id',getDates);
 router.get('/getreports',getReports);
 
-router.post('/setPatient',setPatient);
+router.post('/setpatient',setPatient);
 router.post('/upload', uploadReport);
 router.post('/uploadpdf', uploadpdf);
 router.post('/pdfparse', pdfparse);
