@@ -51,10 +51,10 @@ PdfSchema = new mongoose.Schema({
     data:Buffer
 })
 
-const patient = mongoose.model('spatients', patientSchema)
-const report = mongoose.model('sreport', reportSchema)
+const patient = mongoose.model('patients', patientSchema)
+const report = mongoose.model('report', reportSchema)
 const saanjh = mongoose.model('saanjh',saanjhSchema)
-const doctor = mongoose.model('sdoctor',doctorSchema)
-const pdf = mongoose.model('spdf', PdfSchema)
+const doctor = mongoose.model('doctor',doctorSchema)
+const pdf = mongoose.model('pdf', PdfSchema)
 
 module.exports = {patient,report,saanjh,doctor,pdf}

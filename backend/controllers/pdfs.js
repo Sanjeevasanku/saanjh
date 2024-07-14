@@ -9,7 +9,7 @@ const Grid = require('gridfs-stream');
 const { analysis } = require('./LLM');
 require('dotenv').config();
 const mongoURL = process.env.MONGO_URL;
-const databaseName = 'Workshop';
+const databaseName = 'saanjh';
 const client = new MongoClient(mongoURL);
 let db;
 client.connect();
