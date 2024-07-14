@@ -4,3 +4,6 @@ index.js
 get_set.js
 pdf.js
 llm.js
+
+
+    // "build": "react-scripts build",
