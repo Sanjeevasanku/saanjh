@@ -219,32 +219,32 @@ const AddPatient = () => {
                                 // onChange={(e) => setFile(e.target.files[0])}
                                 onChange={handleFileChange}
                             /> */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Current Chronic Conditions</label>
-                                <div className="mt-1 flex rounded-md shadow-sm">
+                            <div className="ap-input-box">
+                                <label className="ap-label">Current Chronic Conditions</label>
+                                <div className="ap-chronic-input">
                                     <input
                                         type="text"
                                         value={currentChronic}
                                         onChange={(e) => setCurrentChronic(e.target.value)}
-                                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300"
+                                        className="ap-chronic-field"
                                         placeholder="Enter a chronic condition"
                                     />
                                     <button
                                         type="button"
                                         onClick={handleAddChronic}
-                                        className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                                        className="ap-chronic-add-btn"
                                     >
                                         Add
                                     </button>
                                 </div>
-                                <div className="mt-2 space-y-2">
+                                <div className="app-chronic-list">
                                     {formData.chronics.map((chronic, index) => (
-                                        <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                                        <div key={index} className="ap-chronic-item">
                                             <span>{chronic}</span>
                                             <button
                                                 type="button"
                                                 onClick={() => handleRemoveChronic(index)}
-                                                className="text-red-500 hover:text-red-700"
+                                                className="app-chronic-remove-btn"
                                             >
                                                 Remove
                                             </button>
@@ -252,7 +252,7 @@ const AddPatient = () => {
                                     ))}
                                 </div>
                             </div>
-                            <button>Submit</button>
+                            <button className="ap-submit-btn">Submit</button>
                         </form>
                     </section>
                 </body>

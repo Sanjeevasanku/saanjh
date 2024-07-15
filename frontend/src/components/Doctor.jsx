@@ -53,7 +53,7 @@ const Doctor = () => {
     const navigate = useNavigate();
 
     const handlePatientClick = (id) =>{
-        navigate(`/getpatient/${id}`);
+        navigate(`/getpatientdetails/${id}`);
     }
 
     const[patientlist, setPatientlist]=useState(null)
