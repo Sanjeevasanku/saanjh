@@ -133,7 +133,7 @@ const getPrevReports = async (req,res) =>{
 const getPatients = async (req, res) => {
     try {
         const Patients = await patient.find();
-        //  console.log("hi")
+         console.log(Patients);
         res.json(Patients);
     } catch (err) {
         console.log(err);

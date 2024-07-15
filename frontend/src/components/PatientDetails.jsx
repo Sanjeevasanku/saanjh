@@ -7,16 +7,29 @@ import Logo from "../Assets/Logo.svg";
 import axios from 'axios';
 
 export default function PatientDetails() {
-    const [patient, setPatient] = useState(null)
-    const { id } = useParams();
-    const [file, setFile] = useState
+    const [patientData, setPatientData] = useState()
+    // const [patientId, setPatientId] = useState(props.id);
+    const [reportsDate, setReportsDate] = useState(null)
+
+
+    const { patientId } = useParams();
+    // const [file, setFile] = useState
+
+    async function GetPatient() {
+        const response = await axios.get(`/en/getpatient/${patientId}`);
+        setPatientData(response.data);
+    }
+
+    async function getDates() {
+        console.log("hi")
+        const response = await axios.get(`/en/getdates/${patientId}`);
+        setReportsDate(response.data)
+    }
+
     useEffect(() => {
-        const function1 = async () => {
-            const response = await axios.get(`/en/getpatientdetails?id=${id}`)
-            setPatient(response.data[0])
-        }
-        function1();
-    }, [id])
+        GetPatient();
+        getDates();
+    }, [patientId])
 
     // const [pdf,setPdf]=useState();
     // const handlefileupload=(e)=>
@@ -36,7 +49,7 @@ export default function PatientDetails() {
     //         }
 
     //     }
-    // const patient = [
+    // const patientData = [
     //     {
     //         fullName: "Sanjana Pendem",
     //         age: 20,
@@ -52,13 +65,13 @@ export default function PatientDetails() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate('/caretaker');
+        navigate(-1);
     };
 
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        setSize
-    }
+    // const handleFileChange = (event) => {
+    //     const selectedFile = event.target.files[0];
+    //     setSize
+    // }
 
     return (
         // <div>
@@ -180,23 +193,23 @@ export default function PatientDetails() {
                     </button>
                 </div>
                 <main class="details-main">
-                    {patient &&
-                        <section className="d-patient-details">
+                    {patientData &&
+                        <section className="d-patientData-details">
                             <h2 class="d-h2">Patient Information</h2>
-                            <p class="d-p"><strong>Id:</strong> {patient._id}</p>
-                            <p class="d-p"><strong>Name:</strong> {patient.fullName}</p>
-                            <p class="d-p"><strong>Email:</strong> {patient.email}</p>
-                            <p class="d-p"><strong>Phone Number:</strong> {patient.phoneNumber}</p>
-                            <p class="d-p"><strong>Date of Birth:</strong> {patient.birthDate}</p>
-                            {/* <p class="d-p"><strong>Age:</strong> {patient.age}</p> */}
-                            <p class="d-p"><strong>Gender:</strong> {patient.gender}</p>
-                            <p class="d-p"><strong>Blood group:</strong> {patient.bloodGroup}</p>
+                            <p class="d-p"><strong>Id:</strong> {patientData._id}</p>
+                            <p class="d-p"><strong>Name:</strong> {patientData.name}</p>
+                            {/* <p class="d-p"><strong>Email:</strong> {patientData.email}</p> */}
+                            <p class="d-p"><strong>Phone Number:</strong> {patientData.phoneNumber}</p>
+                            <p class="d-p"><strong>Date of Birth:</strong> {patientData.birthDate}</p>
+                            {/* <p class="d-p"><strong>Age:</strong> {patientData.age}</p> */}
+                            <p class="d-p"><strong>Gender:</strong> {patientData.gender}</p>
+                            <p class="d-p"><strong>Blood group:</strong> {patientData.bloodGroup}</p>
                         </section>
                     }
                     <section className="d-predicted-risks">
                         <h2 class="d-h2">Predicted Risks</h2>
                         <ul class="d-ul">
-                            {/* {patient.predictedRisks.map((risk, index) => (
+                            {/* {patientData.predictedRisks.map((risk, index) => (
                             <li key={index}>{risk}</li>
                         ))} */}
                         </ul>
@@ -204,7 +217,7 @@ export default function PatientDetails() {
                     <section className="d-recommended-treatment">
                         <h2 class="d-h2">Recommended Treatment</h2>
                         <ul class="d-ul">
-                            {/* {patient.recommendedTreatment.map((treatment, index) => (
+                            {/* {patientData.recommendedTreatment.map((treatment, index) => (
                             <li key={index}>{treatment}</li>
                         ))} */}
                         </ul>
@@ -213,8 +226,8 @@ export default function PatientDetails() {
                         type="file"
                         class="form-control"
                         accept="application/pdf"
-                        // onChange={(e) => setFile(e.target.files[0])}
-                        onChange={handleFileChange}
+                    // onChange={(e) => setFile(e.target.files[0])}
+                    // onChange={handleFileChange}
                     />
                 </main>
             </div>
