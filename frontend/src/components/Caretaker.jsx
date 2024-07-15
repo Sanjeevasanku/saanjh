@@ -60,12 +60,21 @@ const Caretaker = () => {
         navigate(`/patientdetails/${id}`);
     }   
 
+    function formatDate(inputDate){
+        const date = new Date(inputDate);
+        const day = String(date.getDate()).padStart(2,'0');
+        const month = String(date.getMonth()+1).padStart(2,'0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     const[patientlist, setPatientlist]=useState(null)
 
     useEffect(()=>{
         const function1 = async() => {
+            // console.log("entered")
             const response=await axios.get("/en/getpatients")
+            // console.log(response.data)
             setPatientlist(response.data);
         }
         function1();
@@ -98,7 +107,7 @@ const Caretaker = () => {
                                 {/* <th>S.No</th> */}
                                 <th>Patient-ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
+                                {/* <th>Email</th> */}
                                 <th>Phone No.</th>
                                 <th>Date of Birth</th>
                                 <th>Gender</th>
@@ -110,10 +119,10 @@ const Caretaker = () => {
                                 <tr key={data._id}  onClick={() => handlePatientClick(data._id)} >
                                     {/* <th>{data.s_no}</th> */}
                                     <td>{data._id}</td>
-                                    <td>{data.fullName}</td>
-                                    <td>{data.email}</td>
+                                    <td>{data.name}</td>
+                                    {/* <td>{data.email}</td> */}
                                     <td>{data.phoneNumber}</td>
-                                    <td>{data.birthDate}</td>
+                                    <td>{formatDate(data.birthDate)}</td>
                                     <td>{data.gender}</td>
                                     <td>{data.bloodGroup}</td>
                                 </tr>
