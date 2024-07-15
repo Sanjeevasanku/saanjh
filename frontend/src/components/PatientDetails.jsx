@@ -217,7 +217,7 @@ export default function PatientDetails() {
                                     display: 'flex',
                                     alignItems: 'center'
                                 }}
-                                onClick={() => handleFileDClick(file)}>
+                                onClick={() => handleFileClick(file)}>
 
                                     <i className="fas fa-file-alt" style={{ fontSize: '20px', color: '#e74c3c', marginRight: '10px' }} />
                                     <p>File ID: {file}</p>
