@@ -1,22 +1,25 @@
 const router = require('express').Router();
 
-const {getReport, getPatient,setPatient,editPatient,getDates,getPrevReports,getPatients,getReports,getSaanjhInfo,savePrecautions} = require('./controllers/get_set');
+// const {getPatient,setPatient,editPatient,getPatients} = require('./controllers/get_set');
+const {getReport, getPatient,setPatient,editPatient,getDates,getPrevReports,getPatients,getReports,getSaanjhInfo,savePrecautions,getreportsdetails,updatedoctornotes} = require('./controllers/get_set');
 const { uploadReport, getParameters, analysis }=require('./controllers/LLM');
-const {uploadpdf,pdfid,pdfparse,receiver} =require('./controllers/pdfs');
+const {uploadpdf,pdfid,pdfparse,reciver} =require('./controllers/pdfs');
 
 router.get('/getreport/:id', getReport);
-router.get('/getpatient/:id', getPatient);
+router.get('/getpatient', getPatient);
 router.get('/getpatients', getPatients);
 router.get('/getsaanjhinfo', getSaanjhInfo);
 router.get('/pdfid/:id',pdfid);
-router.get('/getdates/:id',getDates);
+router.get('/getdates/',getDates);
 router.get('/getreports',getReports);
+router.get('/getreportdetails',getreportsdetails);
 
+router.post("/updateDoctorNotes/:id",updatedoctornotes)
 router.post('/setpatient',setPatient);
 router.post('/upload', uploadReport);
 router.post('/uploadpdf', uploadpdf);
 router.post('/pdfparse', pdfparse);
-router.post('/reciver',receiver);
+router.post('/reciver',reciver);
 router.post('/getparameters',getParameters);
 router.post('/analysis',analysis);
 router.post('/saveprecautions',savePrecautions);

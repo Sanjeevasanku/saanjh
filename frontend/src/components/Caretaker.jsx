@@ -57,7 +57,7 @@ const Caretaker = () => {
     };
 
     const handlePatientClick = (id) =>{
-        navigate(`/patientdetails/${id}`);
+        navigate(`/getpatientdetails/${id}`);
     }   
 
     function formatDate(inputDate){

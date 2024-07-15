@@ -220,7 +220,7 @@ const uploadReport = async (req, res) => {
             .replace('\n', '');
         const analysisjson = JSON.parse(analysis);
         const a = await report.findOne({ _id: id });
-        a.precautions = analysisjson['Precautions'];
+        a.precations = analysisjson['Precautions'];
         a.summary = analysisjson['Short-Analysis'];
         a.possibleDiseases = analysisjson['Possible-disease risks'];
         a.severity = analysisjson['Severity'];
@@ -455,7 +455,7 @@ const analysis = async (req, res) => {
 
     const analysisjson = JSON.parse(analysisResult);
     const a = await report.findOne({ _id: id });
-    a.precautions = analysisjson['Precautions'];
+    a.precations = analysisjson['Precautions'];
     a.summary = analysisjson['Short-Analysis'];
     a.possibleDiseases = analysisjson['Possible-disease risks'];
     a.severity = analysisjson['Severity'];
@@ -489,5 +489,14 @@ const analysis = async (req, res) => {
 
 
 }
+
+
+
+
+
+
+
+
+
 
 module.exports = { uploadReport, getParameters, analysis }

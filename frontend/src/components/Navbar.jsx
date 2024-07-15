@@ -46,12 +46,9 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const handleClickDoc = () => {
-    navigate('/doctor');
+  const handleClick = () => {
+    navigate('/signin');
   }
-  const handleClickCare = () => {
-    navigate('/caretaker');
-  };
 
   return (
     <nav>
@@ -63,8 +60,8 @@ const Navbar = () => {
         <a href="">About us</a>
         <a href="">Contact</a>
 
-        <button className="primary-button" onClick={handleClickDoc}>Doctor</button>
-        <button className="primary-button" onClick={handleClickCare}>Caretaker</button>
+        <button className="primary-button" onClick={handleClick}>Login</button>
+        {/* <button className="primary-button" onClick={handleClickCare}>Caretaker</button> */}
       </div>
       {/* <div className="navbar-menu-container">
         <HiOutlineBars3 onClick={() => setOpenMenu(true)} />
