@@ -1036,3 +1036,146 @@ nav {
   margin-bottom: 1rem;
   animation: float 3s ease-in-out infinite;
 }
+
+.doctor-analysis-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-details {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+}
+
+.report-header {
+  text-align: center;
+  color: #4daea3;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.report-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.report-info p {
+  font-size: 1rem;
+  color: #6a6a6a;
+}
+
+.report-info strong {
+  color: #4c4c4c;
+}
+
+.report-summary,
+.report-specialist,
+.report-precautions,
+.report-diseases,
+.report-notes {
+  margin-bottom: 1.5rem;
+}
+
+.report-summary p,
+.report-specialist p {
+  font-size: 1rem;
+  color: #6a6a6a;
+  line-height: 1.6;
+}
+
+.report-precautions ul,
+.report-diseases ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.report-precautions li,
+.report-diseases li {
+  display: inline-block;
+  background-color: #aed9d3;
+  color: #1c7166;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.report-notes textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+}
+
+
+.edit-button,
+.save-button,
+.cancel-button {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  background-color: #4daea3;
+  color: white;
+}
+
+.save-button {
+  background-color: #1c7166;
+  color: white;
+  margin-right: 1rem;
+}
+
+.cancel-button {
+  background-color: #6C757D;
+  color: white;
+}
+
+.edit-button:hover,
+.save-button:hover,
+.cancel-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .report-info {
+    flex-direction: column;
+  }
+
+  .report-info p {
+    margin-bottom: 0.5rem;
+  }
+
+  .edit-button,
+  .save-button,
+  .cancel-button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}

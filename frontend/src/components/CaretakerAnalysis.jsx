@@ -8,9 +8,9 @@ import Caretaker from './Caretaker';
 
 export default function CaretakerAnalysis() {
   const [patient, setPatient] = useState(null);
-  
+
   const { id } = useParams();
-  
+
 
   useEffect(() => {
     const getReportDetails = async () => {
@@ -27,46 +27,53 @@ export default function CaretakerAnalysis() {
   }, [id]);
 
 
- 
+
 
   return (
     <div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="doctor-analysis-container">
         {patient ? (
-          <div style={{ 
-            padding: '10px',
-            marginTop: '6%',
-            border: '1px solid #ccc',
-            borderRadius: '5px',
-            width: '70%',
-            minHeight: '70vh',
-          }}>
-            <h2 style={{ textAlign: 'center' }}>REPORT DETAILS</h2>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <div className="report-details">
+            <h3 className="report-header"><strong>REPORT DETAILS</strong></h3>
+            <div className="report-info">
               <p><strong>ID:</strong> {patient._id}</p>
               <p><strong>Date of Report:</strong> {patient.dateOfReport ? new Date(patient.dateOfReport).toLocaleDateString() : 'N/A'}</p>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div className="report-info">
               <p><strong>Patient:</strong> {patient.patient}</p>
               <p><strong>Severity:</strong> {patient.severity}</p>
             </div>
-            <p><strong>Summary:</strong> {patient.summary}</p>
-            <p><strong>Specialist Required:</strong> {patient.specialistReq}</p>
-            <p><strong>Precautions</strong></p> {patient.precations.map((condition, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                      <li>{condition}</li>
-                    </span>
-                  ))}
-            <p><strong>Possible Diseases</strong></p> {patient.possibleDiseases.map((condition, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                      <li>{condition}</li>
-                    </span>
-                  ))}
-            <p><strong>Doctor's Note:</strong> {patient.doctorNotes}</p>
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              
-              <button style={{ padding: '10px 20px', backgroundColor: '#990011FF', color: 'white', border: 'none', borderRadius: '5px', marginRight: '10px' }}  >
+
+            <div className="report-summary">
+              <p><strong>Summary:</strong> {patient.summary}</p>
+            </div>
+            <div className="report-specialist">
+              <p><strong>Specialist Required:</strong> {patient.specialistReq}</p>
+            </div>
+            <div className="report-precautions">
+              <p><strong>Precautions</strong></p>
+              <ul>
+                {patient.precations.map((condition, index) => (
+                  <li key={index}>{condition}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="report-diseases">
+              <p><strong>Possible Diseases</strong></p>
+              <ul>
+                {patient.possibleDiseases.map((condition, index) => (
+                  <li key={index}>{condition}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p><strong>Doctor's Note:</strong> {patient.doctorNotes}</p>
+            </div>
+
+            <div className='button-container'>
+              <button className='edit-button'  >
                 View Report
               </button>
             </div>
