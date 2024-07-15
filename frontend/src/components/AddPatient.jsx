@@ -1,27 +1,48 @@
 import React from 'react'
 import Logo from "../Assets/Logo.svg";
 import { useState } from 'react';
-import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AddPatient = () => {
-    
+
+
+    const [currentChronic, setCurrentChronic] = useState('');
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        fullName: "",
-        email: "",
-        phoneNumber: "",
-        birthDate: "",
-        gender: "",
-        bloodGroup: "",
-        file: null
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        bloodGroup: '',
+        phoneNumber: '',
+        chronics: []
     });
 
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
+    };
+
+    const handleAddChronic = () => {
+        if (currentChronic.trim() !== '') {
+            setFormData(prevData => ({
+                ...prevData,
+                chronics: [...prevData.chronics, currentChronic.trim()]
+            }));
+            setCurrentChronic('');
+        }
+    };
+
+    const handleRemoveChronic = (index) => {
+        setFormData(prevData => ({
+            ...prevData,
+            chronics: prevData.chronics.filter((_, i) => i !== index)
+        }));
     };
 
     const handleFileChange = (e) => {
@@ -33,10 +54,26 @@ const AddPatient = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        const response = await axios.post("/en/uploadpatient", formData);
-        const data=response.data;
-        alert(data)
+        console.log('Form submitted:', formData);
+
+        const formDataToSend = {
+            ...formData,
+            dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null
+        };
+
+        const response = await axios.post("/en/setpatient", formDataToSend);
+        console.log(response.data.data);
+        setFormData({
+            firstName: '',
+            lastName: '',
+            dateOfBirth: null,
+            gender: '',
+            bloodGroup: '',
+            phoneNumber: '',
+            chronics: [],
+        });
+        alert('Form data submitted successfully!');
+        navigate(-1);
 
         // const data = new FormData();
         // for(const key in formData){
@@ -78,25 +115,25 @@ const AddPatient = () => {
                         <header>Patient Registration Form</header>
                         <form action="#" className="ap-form" onSubmit={handleSubmit}>
                             <div className="ap-input-box">
-                                <label>Full Name</label>
+                                <label>First Name</label>
                                 <input
                                     type="text"
-                                    placeholder="Enter full name"
-                                    name="fullName"
-                                    value={formData.fullName}
-                                    onChange={handleChange}
+                                    placeholder="First name"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
                                     required
                                 />
                             </div>
 
                             <div className="ap-input-box">
-                                <label>Email Address</label>
+                                <label>Last Name</label>
                                 <input
                                     type="text"
-                                    placeholder="Enter email address"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
+                                    placeholder="Last name"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
                                     required
                                 />
                             </div>
@@ -106,10 +143,10 @@ const AddPatient = () => {
                                     <label>Phone Number</label>
                                     <input
                                         type="number"
-                                        placeholder="Enter phone number"
+                                        placeholder="Phone number"
                                         name="phoneNumber"
                                         value={formData.phoneNumber}
-                                        onChange={handleChange}
+                                        onChange={handleInputChange}
                                         required
                                     />
                                 </div>
@@ -118,9 +155,9 @@ const AddPatient = () => {
                                     <input
                                         type="date"
                                         placeholder="Enter birth date"
-                                        name="birthDate"
-                                        value={formData.birthDate}
-                                        onChange={handleChange}
+                                        name="dateOfBirth"
+                                        value={formData.dateOfBirth}
+                                        onChange={handleInputChange}
                                         required
                                     />
                                 </div>
@@ -135,7 +172,7 @@ const AddPatient = () => {
                                             name="gender"
                                             value="male"
                                             checked={formData.gender === "male"}
-                                            onChange={handleChange}
+                                            onChange={handleInputChange}
                                         />
                                         <label for="check-male">male</label>
                                     </div>
@@ -146,7 +183,7 @@ const AddPatient = () => {
                                             name="gender"
                                             value="female"
                                             checked={formData.gender === "female"}
-                                            onChange={handleChange}
+                                            onChange={handleInputChange}
                                         />
                                         <label for="check-female">Female</label>
                                     </div>
@@ -158,7 +195,7 @@ const AddPatient = () => {
                                         <select
                                             name="bloodGroup"
                                             value={formData.bloodGroup}
-                                            onChange={handleChange}
+                                            onChange={handleInputChange}
                                             required
                                         >
                                             <option hidden>Blood Group</option>
@@ -182,7 +219,39 @@ const AddPatient = () => {
                                 // onChange={(e) => setFile(e.target.files[0])}
                                 onChange={handleFileChange}
                             /> */}
-
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Current Chronic Conditions</label>
+                                <div className="mt-1 flex rounded-md shadow-sm">
+                                    <input
+                                        type="text"
+                                        value={currentChronic}
+                                        onChange={(e) => setCurrentChronic(e.target.value)}
+                                        className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300"
+                                        placeholder="Enter a chronic condition"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleAddChronic}
+                                        className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                                <div className="mt-2 space-y-2">
+                                    {formData.chronics.map((chronic, index) => (
+                                        <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                                            <span>{chronic}</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveChronic(index)}
+                                                className="text-red-500 hover:text-red-700"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                             <button>Submit</button>
                         </form>
                     </section>
