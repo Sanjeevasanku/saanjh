@@ -240,6 +240,7 @@ const updatedoctornotes = async (req, res) => {
     }
 }
 
+
 // const getpatientdetails = async (req, res) => {
 //     const id = req.query.id; // Get the ID from the query parameters
 //     //console.log('Fetching details for ID:', id);

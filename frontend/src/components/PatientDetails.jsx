@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Logo from "../Assets/Logo.svg";
 import axios from 'axios';
 
-export default function PatientDetails() {
+export default function PatientDetails(props) {
     const [patientData, setPatientData] = useState()
     // const [patientId, setPatientId] = useState(props.id);
     const [reportsDate, setReportsDate] = useState(null)
@@ -59,17 +59,22 @@ export default function PatientDetails() {
         return age;
     };
 
-    // const handlePatient = async (id) => {
-    //     try {
+    // navigate(`/caretakeranalysis/${file}`)
 
-    //         navigate(`/doctoranalysis`, { state: { id: id, pid: patientId, patientData: patientData } })
+    const handlePatient = async (file) => {
+        try {
+            if (props.isDoctor) {
+                navigate(`/doctoranalysis/${file}`, { state: { id: file, pid: id, isDoctor: props.isDoctor, patientData: patientData } })
+            }
+            else {
+                navigate(`/caretakeranalysis/${file}`, { state: { id: file, pid: id, isDoctor: props.isDoctor, patientData: patientData } })
+            }
 
+        }
+        catch (error) {
 
-    //     }
-    //     catch (error) {
-
-    //     }
-    // }
+        }
+    }
 
     const handleFile = async (event) => {
         setIsOPen(true);
@@ -120,7 +125,7 @@ export default function PatientDetails() {
     const handleFileClick = async (file) => {
         navigate(`/caretakeranalysis/${file}`)
     };
-    
+
     const handleFileDClick = async (file) => {
         navigate(`/doctoranalysis/${file}`)
     };
@@ -189,37 +194,42 @@ export default function PatientDetails() {
 
 
                     <div className="file-upload-container">
-                        
-                        <label htmlFor="file-upload" className="file-upload-label">
-                            Upload Reports
-                        </label>
-                        <input
-                            id="file-upload"
-                            type="file"
-                            className="hidden"
-                            onChange={handleFile}
-                        />
+
+                        {!props.isDoctor ?
+                            (
+                                <><label htmlFor="file-upload" className="file-upload-label">
+                                    Upload Reports
+                                </label>
+                                    <input
+                                        id="file-upload"
+                                        type="file"
+                                        className="hidden"
+                                        onChange={handleFile}
+                                    />
+                                </>
+                            ) :(<></>) }
+
                         <h2 >
                             Report History
                         </h2>
                     </div>
 
-                    <div>
+                    {/* <div>
                         {patientData?.reportsList && patientData.reportsList.length > 0 ? (
                             patientData.reportsList.map((file, index) => (
-                                <div key={index} 
-                                className="file-item" 
-                                // style={{
-                                //     backgroundColor: '#e9ecef',
-                                //     color: '#495057',
-                                //     padding: '8px',
-                                //     borderRadius: '5px',
-                                //     margin: '8px 0',
-                                //     cursor: 'pointer',
-                                //     display: 'flex',
-                                //     alignItems: 'center'
-                                // }}
-                                onClick={() => handleFileClick(file)}>
+                                <div key={index}
+                                    className="file-item"
+                                    // style={{
+                                    //     backgroundColor: '#e9ecef',
+                                    //     color: '#495057',
+                                    //     padding: '8px',
+                                    //     borderRadius: '5px',
+                                    //     margin: '8px 0',
+                                    //     cursor: 'pointer',
+                                    //     display: 'flex',
+                                    //     alignItems: 'center'
+                                    // }}
+                                    onClick={() => handlePatient(file)}>
 
                                     <i className="fas fa-file-alt" style={{ fontSize: '20px', color: '#e74c3c', marginRight: '10px' }} />
                                     <p>File ID: {file}</p>
@@ -228,27 +238,27 @@ export default function PatientDetails() {
                         ) : (
                             <p>No reports found.</p>
                         )}
-                    </div>
+                    </div> */}
 
-                    {/* <div>
+                    <div>
                         {reportsDate ? reportsDate.map((report, index) => (
                             //   <div onClick={() => { handlePatient(report.file) }} key={index} className="flex items-center gap-4 bg-slate-50 px-4 min-h-[72px] py-2 justify-between cursor-pointer hover:bg-slate-100 hover:scale-105 transition transform duration-300">
-                            <div key={index} className="flex items-center gap-4 bg-slate-50 px-4 min-h-[72px] py-2 justify-between cursor-pointer hover:bg-slate-100 hover:scale-105 transition transform duration-300">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-[#0d151c] flex items-center justify-center rounded-lg bg-[#e7eef4] shrink-0 size-12" data-icon="File" data-size="24px" data-weight="regular">
+                            <div key={index} onClick={() => handlePatient(report.file)} className="file-item">
+                                <div>
+                                    <div >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                                             <path
                                                 d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"
                                             ></path>
                                         </svg>
                                     </div>
-                                    <div className="flex flex-col justify-center">
+                                    <div>
                                         <p className="text-[#0d151c] text-base font-medium leading-normal line-clamp-1">{report.date}</p>
                                         <p className="text-[#49779c] text-sm font-normal leading-normal line-clamp-2">{report.specialistReq}</p>
                                     </div>
                                 </div>
-                                <div className="shrink-0">
-                                    <div className="text-[#0d151c] flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
+                                <div>
+                                    <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                                             <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
                                         </svg>
@@ -256,7 +266,7 @@ export default function PatientDetails() {
                                 </div>
                             </div>
                         )) : <p>No reports found.</p>}
-                    </div> */}
+                    </div>
 
 
 
