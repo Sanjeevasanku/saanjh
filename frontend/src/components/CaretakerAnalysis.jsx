@@ -26,7 +26,74 @@ export default function CaretakerAnalysis() {
     getReportDetails();
   }, [id]);
 
+  const handlePDFView = async () => {
+    try {
+      const response = await axios.get(`/en/files/${patient.file}`, { responseType: 'arraybuffer' });
+      const binaryData = new Uint8Array(response.data);
+      const blob = new Blob([binaryData], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error("Error fetching PDF file:", error);
+    }
+  };
 
+  const generatePDF = () => {
+    if (!patient) {
+      console.error('Patient data is not loaded yet.');
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    // Add report details to the PDF
+    doc.setFontSize(18);
+    doc.text('SAANJH SAHAYAK', doc.internal.pageSize.width / 2, 10, { align: 'center' });
+    doc.setFontSize(16);
+    doc.text('Report Details', 10, 20);
+
+    doc.setFontSize(12);
+    doc.text(`ID: ${patient._id}`, 10, 35);
+    doc.text(`Date of Report: ${patient.dateOfReport ? new Date(patient.dateOfReport).toLocaleDateString() : 'N/A'}`, 10, 45);
+    doc.text(`Patient: ${patient.patient}`, 10, 55);
+
+    // Split summary text into lines that fit within the page width
+    const summaryLines = doc.splitTextToSize(patient.summary || '', doc.internal.pageSize.width - 20);
+    doc.text('Summary:', 10, 65);
+    summaryLines.forEach((line, index) => {
+      if (index < 5) { // Limit to show only 5 lines of summary
+        doc.text(line, 15, 75 + index * 10); // Adjust Y position based on index and line height
+      }
+    });
+
+    doc.text(`Severity: ${patient.severity}`, 10, 135);
+    doc.text(`Specialist Required: ${patient.specialistReq}`, 10, 145);
+    let yPos = 155;
+
+    // Add precautions
+    if (patient.precations.length > 0) {
+      doc.text('Precautions:', 10, yPos);
+      yPos += 10;
+      patient.precations.forEach((precation, index) => {
+        yPos += 5; // Add spacing between each precaution
+        doc.text(`- ${precation}`, 15, yPos + index * 10);
+      });
+      yPos += (patient.precations.length * 10) + 10; // Add extra space after precautions
+    }
+
+    // Add doctor's note
+    if (patient.doctorNotes) {
+      doc.text('Doctor\'s Note:', 10, yPos);
+      yPos += 10;
+      const doctorNoteLines = doc.splitTextToSize(patient.doctorNotes, doc.internal.pageSize.width - 20);
+      doctorNoteLines.forEach((line, index) => {
+        doc.text(line, 15, yPos + index * 10);
+      });
+    }
+
+    // Save the PDF
+    doc.save(`Report-${patient._id}.pdf`);
+  };
 
 
   return (
@@ -73,7 +140,10 @@ export default function CaretakerAnalysis() {
             </div>
 
             <div className='button-container'>
-              <button className='edit-button'  >
+              <button className='save-button' onClick={generatePDF} >
+                Download report
+              </button>
+              <button className='save-button' onClick={handlePDFView} >
                 View Report
               </button>
             </div>

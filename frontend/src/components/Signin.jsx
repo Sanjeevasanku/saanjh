@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signin = () => {
+const Signin = ({setIsDoctor}) => {
     const [userRole, setUserRole] = useState("");
+    // const [isDoctor, setIsDoctor] = useState("");
     const navigate = useNavigate();
 
     const handleValueChange = (event) => {
         const role = event.target.value;
         setUserRole(role);
-        // setIsDoctor(role === 'doctor');
+        setIsDoctor(role === 'doctor');
     };
 
     const handleSignIn = () => {

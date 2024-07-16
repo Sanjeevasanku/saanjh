@@ -117,14 +117,24 @@ export default function DoctorAnalysis() {
                                     </button>
                                 </div>
                             ) : (
-                                <div>
-                                    <button
-                                        onClick={handleEdit}
-                                        className="edit-button"
-                                    >
-                                        Edit Doctor's Notes
-                                    </button>
-                                </div>
+                                <>
+                                    <div>
+                                        <button
+                                            onClick={handleEdit}
+                                            className="save-button"
+                                        >
+                                            Edit Doctor's Notes
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button
+                                            onClick={handleEdit}
+                                            className="save-button"
+                                        >
+                                            View Report
+                                        </button>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
