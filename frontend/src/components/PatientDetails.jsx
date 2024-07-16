@@ -1,5 +1,4 @@
 import React from 'react'
-// import Navigationvar from './Navigationvar'
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
@@ -189,11 +188,9 @@ export default function PatientDetails() {
 
 
 
-                    <div >
-                        <h2 >
-                            Report History
-                        </h2>
-                        <label htmlFor="file-upload">
+                    <div className="file-upload-container">
+                        
+                        <label htmlFor="file-upload" className="file-upload-label">
                             Upload Reports
                         </label>
                         <input
@@ -202,21 +199,26 @@ export default function PatientDetails() {
                             className="hidden"
                             onChange={handleFile}
                         />
+                        <h2 >
+                            Report History
+                        </h2>
                     </div>
 
                     <div>
                         {patientData?.reportsList && patientData.reportsList.length > 0 ? (
                             patientData.reportsList.map((file, index) => (
-                                <div key={index} className="file-item" style={{
-                                    backgroundColor: '#e9ecef',
-                                    color: '#495057',
-                                    padding: '8px',
-                                    borderRadius: '5px',
-                                    margin: '8px 0',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
+                                <div key={index} 
+                                className="file-item" 
+                                // style={{
+                                //     backgroundColor: '#e9ecef',
+                                //     color: '#495057',
+                                //     padding: '8px',
+                                //     borderRadius: '5px',
+                                //     margin: '8px 0',
+                                //     cursor: 'pointer',
+                                //     display: 'flex',
+                                //     alignItems: 'center'
+                                // }}
                                 onClick={() => handleFileClick(file)}>
 
                                     <i className="fas fa-file-alt" style={{ fontSize: '20px', color: '#e74c3c', marginRight: '10px' }} />
