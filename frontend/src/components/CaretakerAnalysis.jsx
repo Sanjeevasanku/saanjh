@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Logo from "../Assets/Logo.svg";
 import { useParams } from 'react-router-dom';
 import jsPDF from 'jspdf'; // Import jspdf library
 import 'jspdf-autotable'; // Import autotable plugin
@@ -98,6 +99,18 @@ export default function CaretakerAnalysis() {
 
   return (
     <div>
+      <header>
+        <nav className='doctor-nav'>
+          <div className="nav-logo-container">
+            <img src={Logo} alt="" />
+          </div>
+          <div className="navbar-links-container">
+            <a href="/">Home</a>
+            <a href="">About us</a>
+            <a href="">Contact</a>
+          </div>
+        </nav>
+      </header>
       <div className="doctor-analysis-container">
         {patient ? (
           <div className="report-details">

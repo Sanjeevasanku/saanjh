@@ -1,8 +1,8 @@
 import React from 'react'
+import Logo from "../Assets/Logo.svg";
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import Logo from "../Assets/Logo.svg";
 import axios from 'axios';
 
 export default function PatientDetails(props) {
@@ -102,6 +102,7 @@ export default function PatientDetails(props) {
                         setIsValid(false);
                         setOpenResult(true);
                     }
+                    alert("Pdf uploaded successfully.")
 
                 } catch (error) {
                     console.log("Error uploading details:", error);
