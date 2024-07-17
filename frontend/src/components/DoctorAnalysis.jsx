@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Logo from "../Assets/Logo.svg";
 import { useParams } from 'react-router-dom';
 
 export default function DoctorAnalysis() {
@@ -49,8 +50,32 @@ export default function DoctorAnalysis() {
         setDoctorNotes(e.target.value);
     };
 
+    const handlePDFView = async () => {
+        try {
+            const response = await axios.get(`/en/files/${patient.file}`, { responseType: 'arraybuffer' });
+            const binaryData = new Uint8Array(response.data);
+            const blob = new Blob([binaryData], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+            console.error("Error fetching PDF file:", error);
+        }
+    };
+
     return (
         <div>
+            <header>
+                <nav className='doctor-nav'>
+                    <div className="nav-logo-container">
+                        <img src={Logo} alt="" />
+                    </div>
+                    <div className="navbar-links-container">
+                        <a href="/">Home</a>
+                        <a href="">About us</a>
+                        <a href="">Contact</a>
+                    </div>
+                </nav>
+            </header>
             <div className="doctor-analysis-container">
                 {patient ? (
                     <div className="report-details">
@@ -128,7 +153,7 @@ export default function DoctorAnalysis() {
                                     </div>
                                     <div>
                                         <button
-                                            onClick={handleEdit}
+                                            onClick={handlePDFView}
                                             className="save-button"
                                         >
                                             View Report

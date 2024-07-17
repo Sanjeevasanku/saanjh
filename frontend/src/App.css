@@ -602,7 +602,7 @@ nav {
 }
 
 .ap-chronic-add-btn {
-  height: 20px;
+  height: 50px;
   padding: 0 20px;
   background-color: #4daea3;
   color: white;
@@ -611,6 +611,7 @@ nav {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  margin: 1vh 1vh 1vh 0vh
 }
 
 .ap-chronic-add-btn:hover {
