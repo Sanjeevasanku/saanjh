@@ -9,6 +9,7 @@ import PatientDetails from "./components/PatientDetails";
 import Signin from "./components/Signin";
 import CaretakerAnalysis from "./components/CaretakerAnalysis";
 import DoctorAnalysis from "./components/DoctorAnalysis";
+import Chatbot from "./components/Chatbot";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/getpatientdetails/:id" element={<PatientDetails isDoctor={isDoctor}  setIsDoctor={setIsDoctor} />}/>
           <Route path="/caretakeranalysis/:id" element={<CaretakerAnalysis/>}/>
           <Route path="/doctoranalysis/:id" element={<DoctorAnalysis/>} />
+          <Route path="/chatbot" element={<Chatbot/>} />
         </Routes>
       </Router>
     </div>
