@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Logo from "../Assets/Logo.svg";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function DoctorAnalysis() {
     const [patient, setPatient] = useState(null);
@@ -9,6 +9,8 @@ export default function DoctorAnalysis() {
     const [isEditing, setIsEditing] = useState(false);
 
     const { id } = useParams();
+
+    const navigate=useNavigate();
 
     useEffect(() => {
         const getReportDetails = async () => {
