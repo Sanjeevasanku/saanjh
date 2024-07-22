@@ -3,6 +3,8 @@ const app = express();
 const { patient,report } = require('../schema');
 const { ObjectId } = require('mongodb');
 
+
+
 const getReport = async (req, res) => {
     try {
         const id = req.params.id;
@@ -282,5 +284,7 @@ const updatedoctornotes = async (req, res) => {
 //     }
 // };
 
-module.exports = { getReport, getPatient, setPatient, editPatient, getDates, getPrevReports, getPatients, getReports, getSaanjhInfo, savePrecautions,getreportsdetails, updatedoctornotes };
+
+
+module.exports = { getReport, getPatient, setPatient, editPatient, getDates, getPrevReports, getPatients, getReports, getSaanjhInfo, savePrecautions,getreportsdetails, updatedoctornotes};
 // module.exports={getPatient,setPatient,editPatient,getPatients};

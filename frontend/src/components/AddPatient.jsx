@@ -95,6 +95,13 @@ const AddPatient = () => {
         // console.log(formData);
     };
 
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+    };
+
     return (
         <div>
             <header>
@@ -106,6 +113,7 @@ const AddPatient = () => {
                         <a href="/">Home</a>
                         <a href="">About us</a>
                         <a href="">Contact</a>
+                        <button className="primary-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </nav>
             </header>

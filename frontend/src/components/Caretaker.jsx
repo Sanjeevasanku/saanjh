@@ -51,34 +51,41 @@ import axios from 'axios';
 
 const Caretaker = () => {
     const navigate = useNavigate();
-    
+
     const handleClickAddPatient = () => {
         navigate('/addpatient');
     };
 
-    const handlePatientClick = (id) =>{
+    const handlePatientClick = (id) => {
         navigate(`/getpatientdetails/${id}`);
-    }   
+    }
 
-    function formatDate(inputDate){
+    function formatDate(inputDate) {
         const date = new Date(inputDate);
-        const day = String(date.getDate()).padStart(2,'0');
-        const month = String(date.getMonth()+1).padStart(2,'0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
 
-    const[patientlist, setPatientlist]=useState(null)
+    const [patientlist, setPatientlist] = useState(null)
 
-    useEffect(()=>{
-        const function1 = async() => {
+    useEffect(() => {
+        const function1 = async () => {
             // console.log("entered")
-            const response=await axios.get("/en/getpatients")
+            const response = await axios.get("/en/getpatients")
             // console.log(response.data)
             setPatientlist(response.data);
         }
         function1();
-    },[])
+    }, [])
+
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+    };
 
     return (
         <div>
@@ -91,6 +98,7 @@ const Caretaker = () => {
                         <a href="/">Home</a>
                         <a href="">About us</a>
                         <a href="">Contact</a>
+                        <button className="primary-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </nav>
             </header>
@@ -116,7 +124,7 @@ const Caretaker = () => {
                         </thead>
                         <tbody>
                             {patientlist && patientlist.map((data) => (
-                                <tr key={data._id}  onClick={() => handlePatientClick(data._id)} >
+                                <tr key={data._id} onClick={() => handlePatientClick(data._id)} >
                                     {/* <th>{data.s_no}</th> */}
                                     <td>{data._id}</td>
                                     <td>{data.name}</td>

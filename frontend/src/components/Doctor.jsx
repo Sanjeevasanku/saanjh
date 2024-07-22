@@ -9,27 +9,34 @@ const Doctor = () => {
 
     const navigate = useNavigate();
 
-    const handlePatientClick = (id) =>{
+    const handlePatientClick = (id) => {
         navigate(`/getpatientdetails/${id}`);
     }
 
-    const[patientlist, setPatientlist]=useState(null)
+    const [patientlist, setPatientlist] = useState(null)
 
-    function formatDate(inputDate){
+    function formatDate(inputDate) {
         const date = new Date(inputDate);
-        const day = String(date.getDate()).padStart(2,'0');
-        const month = String(date.getMonth()+1).padStart(2,'0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
 
-    useEffect(()=>{
-        const function1 = async() => {
-            const response=await axios.get("/en/getpatients")
+    useEffect(() => {
+        const function1 = async () => {
+            const response = await axios.get("/en/getpatients")
             setPatientlist(response.data);
         }
         function1();
-    },[])
+    }, [])
+
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+    };
 
     return (
         <div>
@@ -42,11 +49,13 @@ const Doctor = () => {
                         <a href="/">Home</a>
                         <a href="">About us</a>
                         <a href="">Contact</a>
+                        <button className="primary-button" onClick={handleLogout}>Logout</button>
+
                     </div>
                 </nav>
             </header>
             <body>
-                
+
                 <div className='d-table-container' >
                     <table className='d-table' >
                         <thead>
@@ -73,7 +82,7 @@ const Doctor = () => {
                         </tbody>
                     </table>
                 </div>
-                <Chatbot/>
+                <Chatbot />
             </body>
         </div>
     )

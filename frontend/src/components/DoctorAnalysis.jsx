@@ -62,6 +62,13 @@ export default function DoctorAnalysis() {
         }
     };
 
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+    };
+
     return (
         <div>
             <header>
@@ -73,6 +80,7 @@ export default function DoctorAnalysis() {
                         <a href="/">Home</a>
                         <a href="">About us</a>
                         <a href="">Contact</a>
+                        <button className="primary-button" onClick={handleLogout}>Logout</button>
                     </div>
                 </nav>
             </header>
