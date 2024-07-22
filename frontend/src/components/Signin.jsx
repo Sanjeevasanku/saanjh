@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signin = ({ setIsDoctor }) => {
     const [userRole, setUserRole] = useState("");
     // const [isDoctor, setIsDoctor] = useState("");
     const [data, setData] = useState({ username: "", password: "" });
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
@@ -54,8 +56,10 @@ const Signin = ({ setIsDoctor }) => {
                     <h2>Saanjh</h2>
                     <p>Elderly Care Health Tracking System</p>
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
+                <form 
+                // onSubmit={handleSubmit}
+                >
+                    {/* <div className="input-group">
                         <label for="username">Username</label>
                         <input
                             type="text"
@@ -76,7 +80,7 @@ const Signin = ({ setIsDoctor }) => {
                             value={data.password}
                             required
                         />
-                    </div>
+                    </div> */}
                     <div className="l-user-type">
                         <label>
                             <input

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Logo from "../Assets/Logo.svg";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Chatbot from './Chatbot';
 
 // const patientlist = [
 //     {
@@ -138,6 +139,7 @@ const Caretaker = () => {
                         </tbody>
                     </table>
                 </div>
+                <Chatbot />
             </body>
         </div>
     )
