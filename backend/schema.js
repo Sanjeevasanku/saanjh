@@ -51,10 +51,25 @@ PdfSchema = new mongoose.Schema({
     data:Buffer
 })
 
+//login
+adminSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true }
+  });
+  
+  
+adminSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, { expiresIn: "7d" });
+    return token;
+  };
+const Admin = mongoose.model('admin', adminSchema)
+
 const patient = mongoose.model('patients', patientSchema)
 const report = mongoose.model('report', reportSchema)
 const saanjh = mongoose.model('saanjh',saanjhSchema)
 const doctor = mongoose.model('doctor',doctorSchema)
 const pdf = mongoose.model('pdf', PdfSchema)
 
-module.exports = {patient,report,saanjh,doctor,pdf}
+
+module.exports = {patient,report,saanjh,doctor,pdf,Admin}

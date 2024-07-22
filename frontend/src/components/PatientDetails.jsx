@@ -131,6 +131,13 @@ export default function PatientDetails(props) {
         navigate(`/doctoranalysis/${file}`)
     };
 
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+    };
+
 
     return (
 
@@ -143,6 +150,7 @@ export default function PatientDetails(props) {
                     <a href="/">Home</a>
                     <a href="">About us</a>
                     <a href="">Contact</a>
+                    <button className="primary-button" onClick={handleLogout}>Logout</button>
                 </div>
             </nav>
             <div className="details">
@@ -208,7 +216,7 @@ export default function PatientDetails(props) {
                                         onChange={handleFile}
                                     />
                                 </>
-                            ) :(<></>) }
+                            ) : (<></>)}
 
                         <h2 >
                             Report History
