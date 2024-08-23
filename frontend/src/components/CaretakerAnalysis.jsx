@@ -164,7 +164,7 @@ export default function CaretakerAnalysis() {
 
             <div className='button-container'>
               <button className='save-button' onClick={generatePDF} >
-                Download Analysis
+                Download report
               </button>
               <button className='save-button' onClick={handlePDFView} >
                 View Report
