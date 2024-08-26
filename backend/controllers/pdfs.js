@@ -65,6 +65,10 @@ const uploadpdf = async (req, res) => {
         const jsonObject = fileDetails.jsonObject;
         
         console.log("hi");
+        console.log(fileId);
+        console.log(jsonObject);
+        console.log(patientId);
+        console.log(name);
         const analysis_response = await axios.post('http://localhost:3000/en/analysis',{fileId : fileId, jsonObject:jsonObject,patientId: patientId,name : name } );
         console.log("analysis_response ",analysis_response.data.data)
         return res.json({data : true});
