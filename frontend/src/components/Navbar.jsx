@@ -49,6 +49,10 @@ const Navbar = () => {
   const handleClick = () => {
     navigate('/signin');
   }
+  const handleSUClick = () => {
+    navigate('/newuser');
+  }
+
 
   return (
     <nav>
@@ -56,11 +60,12 @@ const Navbar = () => {
         <img src={Logo} alt="" />
       </div>
       <div className="navbar-links-container">
-        <a href="">Home</a>
-        <a href="">About us</a>
-        <a href="">Contact</a>
+        <a href="/">Home</a>
+        <a href="/">About us</a>
+        <a href="/">Contact</a>
 
         <button className="primary-button" onClick={handleClick}>Login</button>
+        <button className="primary-button" onClick={handleSUClick}>Signup</button>
         {/* <button className="primary-button" onClick={handleClickCare}>Caretaker</button> */}
       </div>
       {/* <div className="navbar-menu-container">

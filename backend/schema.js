@@ -14,6 +14,38 @@ patientSchema = new mongoose.Schema({
     // file : Object
 })
 
+const userSchema = new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true
+    },
+    password: {
+      type: String,
+     
+    },
+    resetToken: {
+      type: String,
+      default: ''
+    },
+    resetTokenExpiry: {
+      type: Date,
+      default: Date.now
+    },
+    role: {
+      type: String,
+      enum: ['doctor', 'caretaker'],
+      default: 'caretaker'
+    }
+  }, { timestamps: true });
+
 saanjhSchema=new mongoose.Schema({
     name:String,
     doctors:Array,
@@ -70,6 +102,8 @@ const report = mongoose.model('report', reportSchema)
 const saanjh = mongoose.model('saanjh',saanjhSchema)
 const doctor = mongoose.model('doctor',doctorSchema)
 const pdf = mongoose.model('pdf', PdfSchema)
+const User = mongoose.model('User', userSchema);
 
 
-module.exports = {patient,report,saanjh,doctor,pdf,Admin}
+
+module.exports = {patient,report,saanjh,doctor,pdf,Admin,User}
