@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
 // const {getPatient,setPatient,editPatient,getPatients} = require('./controllers/get_set');
-const {getReport, getPatient,setPatient,editPatient,getDates,getPrevReports,getPatients,getReports,getSaanjhInfo,savePrecautions,getreportsdetails,updatedoctornotes} = require('./controllers/get_set');
-const { uploadReport, getParameters, analysis, chatbot }=require('./controllers/LLM');
+const {getReport, getPatient,setPatient,editPatient,getDates,getPrevReports,getPatients,getReports,getSaanjhInfo,savePrecautions,getreportsdetails,updatedoctornotes,login,newuser,passwordreset} = require('./controllers/get_set');
+const {  getParameters, analysis, chatbot }=require('./controllers/LLM');
 const {uploadpdf,pdfid,pdfparse,reciver} =require('./controllers/pdfs');
 
 router.get('/getreport/:id', getReport);
@@ -18,7 +18,7 @@ router.get('/getreportdetails',getreportsdetails);
 
 router.post("/updateDoctorNotes/:id",updatedoctornotes)
 router.post('/setpatient',setPatient);
-router.post('/upload', uploadReport);
+// router.post('/upload', uploadReport);
 router.post('/uploadpdf', uploadpdf);
 router.post('/pdfparse', pdfparse);
 router.post('/reciver',reciver);
@@ -28,6 +28,9 @@ router.post('/saveprecautions',savePrecautions);
 router.post('/getprevreports',getPrevReports);
 router.post('/editPatient',editPatient);
 router.post('/chatbot',chatbot)
+router.post('/login',login);
+router.post('/newuser',newuser);
+router.post('/reset-password/:token',passwordreset);
 
 
 

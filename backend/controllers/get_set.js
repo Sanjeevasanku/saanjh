@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
-const { patient,report } = require('../schema');
+// const { patient,report } = require('../schema');
 const { ObjectId } = require('mongodb');
 
+const { patient,report,User} = require("../schema");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 
 const getReport = async (req, res) => {
@@ -284,7 +289,105 @@ const updatedoctornotes = async (req, res) => {
 //     }
 // };
 
+const login=async(req,res)=>
+    {
+      const { email, password, userRole } = req.body;
+     
+    
+      try {
+       
+        const user = await User.findOne({ email:email, role:userRole });
+        if (!user) {
+          return res.status(400).json({ msg: 'Invalid credentials.' });
+        }
+    
+     
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res.status(400).json({ msg: 'Invalid credentials.' });
+        }
+    
+        res.status(200).json({ msg: 'Login successful!' });
+      } catch (error) {
+        res.status(500).json({ msg: 'Server error.' });
+      }
+    }
+    
+    
+    
+    
+    const newuser=async(req,res)=>
+    {
+      const { email, name,role  } = req.body;
+    
+    
+      
+    
+      try {
+        
+        let user = await User.findOne({ email });
+        if (user) {
+          return res.status(400).json({ msg: 'User already exists.' });
+        }
+        
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user = new User({ email, name, role, resetToken });
+        await user.save();
+    
+        
+    
+       
+        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'mathiangelina0@gmail.com',
+            pass: 'afizealfkixuopwa'
+          }
+        });
+        const mailOptions = {
+          from: 'mathiangelina0@gmail.com',
+          to: email,
+          subject: 'Password Reset',
+          html: `<p>Click <a href="${resetUrl}">here</a> to set your password.</p>`
+        };
+    
+        await transporter.sendMail(mailOptions);
+       
+        res.status(200).json({ msg: 'Signup successful! Please check your email to set your password.' });
+      } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ msg: 'Server error.' });
+      }
+    }
+    
+    
+    const passwordreset=async(req,res)=>
+    {
+      const { token } = req.params;
+      const { password } = req.body;
+    
+      try {
+       
+        const user = await User.findOne({ resetToken: token });
+        if (!user) {
+          return res.status(400).json({ msg: 'Invalid or expired token.' });
+        }
+    
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+       
+        user.password = hashedPassword; 
+        user.resetToken = token; 
+        await user.save();
+    
+        res.status(200).json({ msg: 'Password has been set successfully! You can now login.' });
+      } catch (error) {
+        res.status(500).json({ msg: 'Server error.' });
+      }
+    }
 
 
-module.exports = { getReport, getPatient, setPatient, editPatient, getDates, getPrevReports, getPatients, getReports, getSaanjhInfo, savePrecautions,getreportsdetails, updatedoctornotes};
+
+module.exports = { getReport, getPatient, setPatient, editPatient, getDates, getPrevReports, getPatients, getReports, getSaanjhInfo, savePrecautions,getreportsdetails, updatedoctornotes,login,newuser,passwordreset};
 // module.exports={getPatient,setPatient,editPatient,getPatients};
