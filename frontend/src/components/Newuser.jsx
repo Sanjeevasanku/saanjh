@@ -5,14 +5,14 @@ import Navbar from './Navbar';
 function Newuser() {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    const [userRole, setUserRole] = useState("");
+    const [role, setUserRole] = useState("");
     // const [isDoctor, setIsDoctor] = useState("");
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('/en/newuser', { email, name, userRole });
+            const response = await axios.post('/en/newuser', { email, name, role });
             setMessage('Signup successful! Please check your email to set your password.');
             // Redirect to login page
         } catch (error) {
@@ -22,8 +22,8 @@ function Newuser() {
     };
 
     const handleValueChange = (event) => {
-        const role = event.target.value;
-        setUserRole(role);
+        const urole = event.target.value;
+        setUserRole(urole);
         // setIsDoctor(role === 'doctor');
     };
 
@@ -68,7 +68,7 @@ function Newuser() {
                                     type="radio"
                                     name="user-type"
                                     value="doctor"
-                                    checked={userRole === "doctor"}
+                                    checked={role === "doctor"}
                                     onChange={handleValueChange}
                                 />
                                 <span>Doctor</span>
@@ -78,7 +78,7 @@ function Newuser() {
                                     type="radio"
                                     name="user-type"
                                     value="caretaker"
-                                    checked={userRole === "caretaker"}
+                                    checked={role === "caretaker"}
                                     onChange={handleValueChange}
                                 />
                                 <span>Caretaker</span>
