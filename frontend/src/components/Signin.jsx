@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 const Signin = ({ setIsDoctor }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userRole, setUserRole] = useState("");
+    const [role, setUserRole] = useState("");
     // const [isDoctor, setIsDoctor] = useState("");
     // const [data, setData] = useState({ username: "", password: "" });
     const [message, setMessage] = useState('');
@@ -19,20 +19,20 @@ const Signin = ({ setIsDoctor }) => {
     // };
 
     const handleValueChange = (event) => {
-        const role = event.target.value;
-        setUserRole(role);
+        const urole = event.target.value;
+        setUserRole(urole);
         setIsDoctor(role === 'doctor');
     };
 
     const handleSignIn = async () => {
         try {
-            const response = await axios.post('/en/login', { email, password, userRole });
+            const response = await axios.post('/en/login', { email, password, role });
             if (response.status === 200) {
                 setMessage('Login successful!');
-                if (userRole === "doctor") {
+                if (role === "doctor") {
                     navigate("/doctor");
                 }
-                else if (userRole === "caretaker") {
+                else if (role === "caretaker") {
                     navigate("/caretaker");
                 }
             }
@@ -110,7 +110,7 @@ const Signin = ({ setIsDoctor }) => {
                                     type="radio"
                                     name="user-type"
                                     value="doctor"
-                                    checked={userRole === "doctor"}
+                                    checked={role === "doctor"}
                                     onChange={handleValueChange}
                                 />
                                 <span>Doctor</span>
@@ -120,7 +120,7 @@ const Signin = ({ setIsDoctor }) => {
                                     type="radio"
                                     name="user-type"
                                     value="caretaker"
-                                    checked={userRole === "caretaker"}
+                                    checked={role === "caretaker"}
                                     onChange={handleValueChange}
                                 />
                                 <span>Caretaker</span>
