@@ -21,7 +21,7 @@ const Signin = ({ setIsDoctor }) => {
     const handleValueChange = (event) => {
         const urole = event.target.value;
         setUserRole(urole);
-        setIsDoctor(role === 'doctor');
+        setIsDoctor(urole === 'doctor');
     };
 
     const handleSignIn = async () => {

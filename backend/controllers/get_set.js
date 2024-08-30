@@ -291,12 +291,12 @@ const updatedoctornotes = async (req, res) => {
 
 const login=async(req,res)=>
     {
-      const { email, password, userRole } = req.body;
+      const { email, password, role } = req.body;
      
     
       try {
        
-        const user = await User.findOne({ email:email, role:userRole });
+        const user = await User.findOne({ email:email, role:role });
         if (!user) {
           return res.status(400).json({ msg: 'Invalid credentials.' });
         }
