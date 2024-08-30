@@ -16,69 +16,69 @@ db = client.db(databaseName);
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const uploadpdf = async (req, res) => {
-    try {
-        if (!db) {
-            throw new Error('MongoDB connection not established.');
-        }
-        const { file, filename , patientId ,name} = req.body;
-        
-        const uploadFile = async (data, name) => {
-            const buffer = Buffer.from(data, 'base64');
-            const bucket = new GridFSBucket(db);
-            const uploadStream = bucket.openUploadStream(name);
-            const fileId = uploadStream.id;
-            let parsed;
-            
-            await Pdf(buffer).then(function(data){
-                 parsed=(data.text);
-            })
+// const uploadpdf = async (req, res) => {
+//     try {
+//         if (!db) {
+//             throw new Error('MongoDB connection not established.');
+//         }
+//         const { file, filename , patientId ,name} = req.body;
 
-           const response =  await axios.post('http://localhost:3000/en/getparameters', { text: parsed });
-           if(response.data.data===false){
-             return {fileId:null,jsonObject:null};
-           }
+//         const uploadFile = async (data, name) => {
+//             const buffer = Buffer.from(data, 'base64');
+//             const bucket = new GridFSBucket(db);
+//             const uploadStream = bucket.openUploadStream(name);
+//             const fileId = uploadStream.id;
+//             let parsed;
 
-           const jsonObject = response.data.data;
-           //console.log("i a m in pdf js",response.data.data)
-            
+//             await Pdf(buffer).then(function(data){
+//                  parsed=(data.text);
+//             })
 
-            await new Promise((resolve, reject) => {
-                uploadStream.end(buffer, (error) => {
-                    if (error) {
-                        console.error(`Error uploading ${name}:`, error);
-                        reject(error);
-                    } else {
-                        console.log(`${name} uploaded successfully, stored under id:`, fileId);
-                        resolve(fileId);
-                    }
-                });
-            });
+//            const response =  await axios.post('http://localhost:3000/en/getparameters', { text: parsed });
+//            if(response.data.data===false){
+//              return {fileId:null,jsonObject:null};
+//            }
 
-            return {fileId,jsonObject};
-        };
-        const fileDetails = file ? await uploadFile(file, filename) : null;
-        if(fileDetails.fileId===null){
-            return res.json({data : false});
-        }
-        const fileId = fileDetails.fileId;
-        const jsonObject = fileDetails.jsonObject;
-        
-        console.log("hi");
-        console.log(fileId);
-        console.log(jsonObject);
-        console.log(patientId);
-        console.log(name);
-        const analysis_response = await axios.post('http://localhost:3000/en/analysis',{fileId : fileId, jsonObject:jsonObject,patientId: patientId,name : name } );
-        console.log("analysis_response ",analysis_response.data.data)
-        return res.json({data : true});
+//            const jsonObject = response.data.data;
+//            //console.log("i a m in pdf js",response.data.data)
 
-        
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to save pdf details' });
-    }
-}
+
+//             await new Promise((resolve, reject) => {
+//                 uploadStream.end(buffer, (error) => {
+//                     if (error) {
+//                         console.error(`Error uploading ${name}:`, error);
+//                         reject(error);
+//                     } else {
+//                         console.log(`${name} uploaded successfully, stored under id:`, fileId);
+//                         resolve(fileId);
+//                     }
+//                 });
+//             });
+
+//             return {fileId,jsonObject};
+//         };
+//         const fileDetails = file ? await uploadFile(file, filename) : null;
+//         if(fileDetails.fileId===null){
+//             return res.json({data : false});
+//         }
+//         const fileId = fileDetails.fileId;
+//         const jsonObject = fileDetails.jsonObject;
+
+//         console.log("hi");
+//         console.log(fileId);
+//         console.log(jsonObject);
+//         console.log(patientId);
+//         console.log(name);
+//         const analysis_response = await axios.post('http://localhost:3000/en/analysis',{fileId : fileId, jsonObject:jsonObject,patientId: patientId,name : name } );
+//         console.log("analysis_response ",analysis_response.data.data)
+//         return res.json({data : true});
+
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Failed to save pdf details' });
+//     }
+// }
 
 const pdfid = async (req, res) => {
     try {
@@ -114,21 +114,109 @@ const pdfid = async (req, res) => {
     }
 };
 
-const pdfparse = async (req, res) => {
+// const pdfparse = async (req, res) => {
+//     try {
+//         const { file } = req.body;
+//         const buffer = Buffer.from(data, 'base64');
+
+//     } catch (error) {
+//       console.error('Error processing file:', error);
+//       res.status(500).send('Error processing file');
+//     }
+//   };
+
+const pdfparse = async (buffer) => {
     try {
-        const { file } = req.body;
-        const buffer = Buffer.from(data, 'base64');
-     
+        const data = await Pdf(buffer);
+        return data.text;
     } catch (error) {
-      console.error('Error processing file:', error);
-      res.status(500).send('Error processing file');
+        console.error('Error parsing PDF:', error);
+        throw new Error('Failed to parse PDF');
     }
-  };
+};
 
-  const reciver = async (req,res)=>{
-    const parsed=req.body.text;
-  }
+const reciver = async (req, res) => {
+    const parsed = req.body.text;
+}
+
+const uploadFile = async (buffer, name) => {
+    try {
+        const bucket = new GridFSBucket(db);
+        const uploadStream = bucket.openUploadStream(name);
+        const fileId = uploadStream.id;
+
+        await new Promise((resolve, reject) => {
+            uploadStream.end(buffer, (error) => {
+                if (error) {
+                    console.error(`Error uploading ${name}:`, error);
+                    reject(error);
+                } else {
+                    console.log(`${name} uploaded successfully, stored under id:`, fileId);
+                    resolve(fileId);
+                }
+            });
+        });
+
+        return fileId;
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw new Error('Failed to upload file');
+    }
+};
+
+const uploadpdf = async (req, res) => {
+    try {
+        if (!db) {
+            throw new Error('MongoDB connection not established.');
+        }
+
+        const { file, filename, patientId, name } = req.body;
+
+        if (!file || !filename || !patientId || !name) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        // Decode base64 file data to buffer
+        const buffer = Buffer.from(file, 'base64');
+
+        // Parse the PDF to extract text
+        const parsedText = await pdfparse(buffer);
+
+        // Upload the PDF to MongoDB GridFS
+        const fileId = await uploadFile(buffer, filename);
+
+        // Send parsed text to another service for parameters
+        const response = await axios.post('http://localhost:3000/en/getparameters', { text: parsedText });
+        if (response.data.data === false) {
+            return res.json({ data: false });
+        }
+
+        const jsonObject = response.data.data;
+
+        // Send parsed text to Ollama model
+        const biomistralResponse = await axios.post('http://localhost:5000/biomistral/predict', {
+            text: parsedText
+        });
+
+        console.log("Biomistral response:", biomistralResponse.data);
+
+        // Send analysis request
+        const analysisResponse = await axios.post('http://localhost:3000/en/analysis', {
+            fileId: fileId,
+            jsonObject: jsonObject,
+            patientId: patientId,
+            name: name
+        });
+
+        console.log("Analysis response:", analysisResponse.data.data);
+
+        return res.json({ data: true });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to process PDF' });
+    }
+};
 
 
-
-module.exports = { uploadpdf, pdfid, pdfparse,reciver,analysis }
+module.exports = { uploadpdf, pdfid, pdfparse, reciver, analysis }
