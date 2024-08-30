@@ -195,7 +195,7 @@ const uploadpdf = async (req, res) => {
 
         // Send parsed text to Ollama model
         const biomistralResponse = await axios.post('http://localhost:5000/biomistral/predict', {
-            text: parsedText
+            content: parsedText
         });
 
         console.log("Biomistral response:", biomistralResponse.data);
