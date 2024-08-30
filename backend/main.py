@@ -28,7 +28,12 @@ def diagnose():
         
         # Generate the response from the model
         outputs = model.generate(inputs)
-        diagnosis = model.decode(outputs)
+        
+        # Collect all outputs from the generator
+        diagnosis_list = list(outputs)
+        
+        # Decode the first output (assuming single output for simplicity)
+        diagnosis = diagnosis_list[0]
         
         return jsonify({'diagnosis': diagnosis})
     except Exception as e:
