@@ -12,6 +12,7 @@ import Passwordreset from "./components/Passwordreset";
 import CaretakerAnalysis from "./components/CaretakerAnalysis";
 import DoctorAnalysis from "./components/DoctorAnalysis";
 import Chatbot from "./components/Chatbot";
+import Chatpy from "./components/chatpy";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/caretakeranalysis/:id" element={<CaretakerAnalysis />} />
           <Route path="/doctoranalysis/:id" element={<DoctorAnalysis />} />
           <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/chatpy" element={<Chatpy/>} />
         </Routes>
       </Router>
     </div>

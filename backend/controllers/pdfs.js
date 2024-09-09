@@ -193,11 +193,11 @@ const uploadpdf = async (req, res) => {
 
         const jsonObject = response.data.data;
 
-        console.log(parsedText);
+        // console.log(parsedText);
 
-        console.log(jsonObject);
+        // console.log(jsonObject);
 
-        console.log(parsedText);
+        // console.log(parsedText);
 
         // const reportData = {
         //     "content": jsonObject
@@ -214,11 +214,11 @@ const uploadpdf = async (req, res) => {
 
         // console.log("Biomistral response:", biomistralResponse.data);
 
-        const ollamaResponse = await axios.post('http://localhost:5000/ollama/predict', {
-            text: parsedText
-        });
+        // const ollamaResponse = await axios.post('http://localhost:5000/ollama/predict', {
+        //     text: parsedText
+        // });
 
-        console.log("Ollama response:", ollamaResponse.data);
+        // console.log("Ollama response:", ollamaResponse.data);
 
 
 
