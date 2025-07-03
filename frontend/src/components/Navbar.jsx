@@ -60,9 +60,9 @@ const Navbar = () => {
         <img src={Logo} alt="" />
       </div>
       <div className="navbar-links-container">
-        <a href="/">Home</a>
+        {/* <a href="/">Home</a>
         <a href="/">About us</a>
-        <a href="/">Contact</a>
+        <a href="/">Contact</a> */}
 
         <button className="primary-button" onClick={handleClick}>Login</button>
         <button className="primary-button" onClick={handleSUClick}>Signup</button>

@@ -342,7 +342,7 @@ const login=async(req,res)=>
           service: 'gmail',
           auth: {
             user: 'mathiangelina0@gmail.com',
-            pass: 'afizealfkixuopwa'
+            pass: 'jjchdkaawgqwqkoo'
           }
         });
         const mailOptions = {
