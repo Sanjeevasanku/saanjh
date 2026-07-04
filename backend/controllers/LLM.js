@@ -28,6 +28,8 @@ const safety_settings = [
     },
 ];
 
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+
 // const uploadReport = async (req, res) => {
 //     const pId = req.body.name;
 //     const pid = new ObjectId('666c5dfef9f86456d8d358df');
@@ -155,7 +157,7 @@ const safety_settings = [
 //         if (jsonObject['medicalQuery'] == 'no') {
 //             return 'no';
 //         }
-        
+
 //         const a = await report.findOne({ _id: id });
 //         a.valuesFromReport = jsonObject;
 //         if (jsonObject['date']) {
@@ -227,7 +229,7 @@ const safety_settings = [
 //         a.specialistReq = analysisjson['specialist'];
 //         a.doctorNotes="";
 //         await a.save();
-        
+
 //     };
 //     const function3 = async () => {
 //         const apiKey = process.env.API_KEY_1;
@@ -279,7 +281,7 @@ const safety_settings = [
 //             }
 //         }
 //         const result = await chatSession.sendMessage(k.toString());
-        
+
 //         const a = await report.findOne({ _id: id });
 //         a.periodicAnalysis = result.response.text();
 //         a.save();
@@ -297,12 +299,13 @@ const safety_settings = [
 
 
 const getParameters = async (req, res) => {
+    try {
     const parsed = req.body.text;
     const apiKey = process.env.API_KEY_1;
     const genAI = new GoogleGenerativeAI(apiKey);
 
     const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: GEMINI_MODEL,
         systemInstruction:
             'If input is not related to medical diagnosis must respond with only {\n"medicalQuery":"no"\n}',
     });
@@ -378,7 +381,7 @@ const getParameters = async (req, res) => {
         'the below information will provide you a data of test report file , fetch the parameters as json object and If data is not related to medical diagnosis must respond with only {\n"medicalQuery":"no"\n} \n' +
         parsed
     );
-    matter = result.response.text();
+    let matter = result.response.text();
     matter = matter
         .replace('json', '')
         .replace('```', '')
@@ -390,13 +393,16 @@ const getParameters = async (req, res) => {
     }
 
     return res.json({ data: jsonObject });
-
-
+    } catch (error) {
+        console.error('Error in getParameters:', error);
+        return res.status(500).json({ error: 'Failed to extract parameters from report' });
+    }
 }
 
 const analysis = async (req, res) => {
-    const { fileId,  patientId,name } = req.body;
-    let {jsonObject}= req.body;
+    try {
+    const { fileId, patientId, name } = req.body;
+    let { jsonObject } = req.body;
     let report1 = new report({});
     report1 = await report1.save();
     const id = report1._id;
@@ -409,12 +415,12 @@ const analysis = async (req, res) => {
     const apiKey = process.env.API_KEY_2;
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: GEMINI_MODEL,
         systemInstruction:
             'you are a medical reports analyzer which analyze the reports and give output in a specific format where the  Keys are summary of analysis, Date of report , Precautions, Possible disease risks, severity rating out of 10, which specialist(one or less) is needed. the format of output should be in:  Short-Analysis:String,Precautions:Array,Possible-disease risks:Array,Severity:int,specialist:String as json format\n',
     });
     jsonObject["chronic conditions"] = await patient.findOne({ _id: patientId }).select({ 'chronics': 1, '-_id': 1 });
-    
+
     const generationConfig = {
         temperature: 0,
         topP: 0.95,
@@ -460,10 +466,10 @@ const analysis = async (req, res) => {
     a.possibleDiseases = analysisjson['Possible-disease risks'];
     a.severity = analysisjson['Severity'];
     a.specialistReq = analysisjson['specialist'];
-    a.patient=name;
-    a.patientId=patientId;
-    a.file=fileId;
-    a.valuesFromReport=jsonObject;
+    a.patient = name;
+    a.patientId = patientId;
+    a.file = fileId;
+    a.valuesFromReport = jsonObject;
     a.dateOfReport = new Date();
     // if (jsonObject['date']) {
     //     console.log(jsonObject['date']);
@@ -479,15 +485,15 @@ const analysis = async (req, res) => {
     // } else {
     //     a.dateOfReport = new Date();
     // }
-    a.isVerified=false;
+    a.isVerified = false;
 
     await a.save();
-    
-    
 
-    return res.json({data:true})
-
-
+    return res.json({ data: true });
+    } catch (error) {
+        console.error('Error in analysis:', error);
+        return res.status(500).json({ error: 'Failed to analyze report' });
+    }
 }
 
 
@@ -495,16 +501,16 @@ const analysis = async (req, res) => {
 //     const { input } = req.body;
 
 
-   
-  
+
+
 //   const apiKey = process.env.API_KEY_2;
 //   const genAI = new GoogleGenerativeAI(apiKey);
-  
+
 //   const model = genAI.getGenerativeModel({
 //     model: "gemini-1.5-pro",
 //     systemInstruction: "Respond only to medical questions with brief, accurate answers that fit in a standard chatbot window. Provide factual information based on established medical knowledge, focusing on symptoms, conditions, treatments, and general health advice. Do not offer personalized diagnoses or treatment plans. For non-medical queries or requests for alternative treatments, politely explain that you're a medical information chatbot and can't assist with those topics. Always encourage users to consult a healthcare professional for personalized medical advice, especially for serious concerns. Keep responses concise, clear, and easy to read.",
 //   });
-  
+
 //   const generationConfig = {
 //     temperature: 1,
 //     topP: 0.95,
@@ -512,8 +518,8 @@ const analysis = async (req, res) => {
 //     maxOutputTokens: 8192,
 //     responseMimeType: "application/json",
 //   };
-  
-  
+
+
 //     const chatSession = model.startChat({
 //       generationConfig,
 //    // safetySettings: Adjust safety settings
@@ -545,7 +551,7 @@ const analysis = async (req, res) => {
 //         },
 //       ],
 //     });
-  
+
 //     const result = await chatSession.sendMessage(input ? input : "hi");
 //     const reply = JSON.parse(result.response.text());
 //     res.json({data:reply.response})
@@ -555,43 +561,46 @@ const apiKey = process.env.API_KEY_3;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({
-  model: 'gemini-1.5-flash',
-  systemInstruction: "Respond only to medical questions with brief, accurate answers that fit in a standard chatbot window. Provide factual information based on established medical knowledge, focusing on symptoms, conditions, treatments, and general health advice. Do not offer personalized diagnoses or treatment plans. For non-medical queries or requests for alternative treatments, politely explain that you're a medical information chatbot and can't assist with those topics. Always encourage users to consult a healthcare professional for personalized medical advice, especially for serious concerns. Keep responses concise, clear, and easy to read.",
+    model: GEMINI_MODEL,
+    systemInstruction: "Respond only to medical questions with brief, accurate answers that fit in a standard chatbot window. Provide factual information based on established medical knowledge, focusing on symptoms, conditions, treatments, and general health advice. Do not offer personalized diagnoses or treatment plans. For non-medical queries or requests for alternative treatments, politely explain that you're a medical information chatbot and can't assist with those topics. Always encourage users to consult a healthcare professional for personalized medical advice, especially for serious concerns. Keep responses concise, clear, and easy to read.",
 
 });
 
 const generationConfig = {
-  temperature: 0.0,
-  topP: 0.9,
-  topK: 50,
-  maxOutputTokens: 50,
-  responseMimeType: 'text/plain',
+    temperature: 0.0,
+    topP: 0.9,
+    topK: 50,
+    maxOutputTokens: 50,
+    responseMimeType: 'text/plain',
 };
 
-const chatbot=async (req, res) => {
+const chatbot = async (req, res) => {
     const userMessage = req.body.message;
-   // console.log('User Message:', userMessage);
-  
+    // console.log('User Message:', userMessage);
+
     try {
-      const chatSession = await model.startChat({
-        generationConfig,
-        history: [],
-      });
-  
-      const result = await chatSession.sendMessage(userMessage);
-      let botResponse = result.response.text();
-      
-     
-      botResponse= botResponse.replace(/\\/g, ""); // Remove Markdown bold markers
-      botResponse = botResponse.replace(/\*/g, "");
-     // console.log('Bot Response:', botResponseString);
-  
-      res.json({ reply: botResponse });
+        const chatSession = await model.startChat({
+            generationConfig,
+            history: [],
+        });
+
+        const result = await chatSession.sendMessage(userMessage);
+        let botResponse = result.response.text();
+
+
+        botResponse = botResponse.replace(/\\/g, ""); // Remove Markdown bold markers
+        botResponse = botResponse.replace(/\*/g, "");
+        // console.log('Bot Response:', botResponseString);
+
+        res.json({ reply: botResponse });
     } catch (error) {
-      console.error('Error communicating with Gemini API:', error);
-      res.status(500).json({ error: 'Failed to communicate with Gemini API' });
+        console.error('Error communicating with Gemini API:', error);
+        res.status(500).json({ error: 'Failed to communicate with Gemini API' });
     }
 };
 
-
-module.exports = { getParameters, analysis, chatbot }
+module.exports = {
+    getParameters,
+    analysis,
+    chatbot
+};

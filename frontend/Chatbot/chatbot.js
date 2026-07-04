@@ -29,13 +29,13 @@ const chatbot = async (req, res) => {
         {
           role: "user",
           parts: [
-            {text: "hello my name is nagasai"},
+            {text: "hello my name is Sanjeeva"},
           ],
         },
         {
           role: "model",
           parts: [
-            {text: "Hello NagaSai! 👋 \n\nI'm glad you're here.  😊  Please remember, I can answer medical questions, but for personalized advice, always talk to a doctor. 🩺 \n \nWhat can I help you with today?  \n"},
+            {text: "Hello Sanjeeva! 👋 \n\nI'm glad you're here.  😊  Please remember, I can answer medical questions, but for personalized advice, always talk to a doctor. 🩺 \n \nWhat can I help you with today?  \n"},
           ],
         },
         {
