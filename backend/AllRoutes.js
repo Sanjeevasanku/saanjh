@@ -3,6 +3,7 @@ const router = require('express').Router();
 // const {getPatient,setPatient,editPatient,getPatients} = require('./controllers/get_set');
 const {getReport, getPatient,setPatient,editPatient,getDates,getPrevReports,getPatients,getReports,getSaanjhInfo,savePrecautions,getreportsdetails,updatedoctornotes,login,newuser,passwordreset} = require('./controllers/get_set');
 const {  getParameters, analysis, chatbot }=require('./controllers/LLM');
+const { reindexPatient } = require('./controllers/rag');
 const {uploadpdf,pdfid,pdfparse,reciver} =require('./controllers/pdfs');
 
 router.get('/getreport/:id', getReport);
@@ -28,6 +29,7 @@ router.post('/saveprecautions',savePrecautions);
 router.post('/getprevreports',getPrevReports);
 router.post('/editPatient',editPatient);
 router.post('/chatbot',chatbot)
+router.post('/rag/reindex-patient', reindexPatient)
 router.post('/login',login);
 router.post('/newuser',newuser);
 router.post('/reset-password/:token',passwordreset);

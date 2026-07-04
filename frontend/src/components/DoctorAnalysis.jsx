@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Logo from "../Assets/Logo.svg";
 import { useNavigate, useParams } from 'react-router-dom';
+import Chatbot from './Chatbot';
 
 export default function DoctorAnalysis() {
     const [patient, setPatient] = useState(null);
@@ -177,6 +178,12 @@ export default function DoctorAnalysis() {
                     <p>Loading report details...</p>
                 )}
             </div>
+            {patient && (
+                <Chatbot
+                    patientId={patient.patientId}
+                    patientName={patient.patient}
+                />
+            )}
         </div>
     );
 }

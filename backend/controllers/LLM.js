@@ -29,6 +29,16 @@ const safety_settings = [
 ];
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const ragClient = require('../services/ragClient');
+const { indexReport, buildDocumentsForPatient } = require('../services/ragIndexer');
+
+const PATIENT_AWARE_SYSTEM = `You are MedAssist, a clinical assistant for Saanjh.
+Use ONLY the patient records provided below when answering questions about this patient.
+If information is missing, say so. Do not invent values or diagnoses. Do not prescribe medication.
+Keep answers concise. End with: "Please consult a healthcare professional for medical decisions."`;
+
+const GENERIC_SYSTEM =
+    "Respond only to medical questions with brief, accurate answers. Provide factual information based on established medical knowledge. Do not offer personalized diagnoses or treatment plans. For non-medical queries, politely explain that you're a medical information chatbot. Always encourage users to consult a healthcare professional. Keep responses concise and clear.";
 
 // const uploadReport = async (req, res) => {
 //     const pId = req.body.name;
@@ -489,7 +499,15 @@ const analysis = async (req, res) => {
 
     await a.save();
 
-    return res.json({ data: true });
+    try {
+        if (await ragClient.isAvailable()) {
+            await indexReport(patientId, a, name);
+        }
+    } catch (indexErr) {
+        console.error('RAG index failed (non-fatal):', indexErr.message);
+    }
+
+    return res.json({ data: true, reportId: id });
     } catch (error) {
         console.error('Error in analysis:', error);
         return res.status(500).json({ error: 'Failed to analyze report' });
@@ -560,42 +578,75 @@ const analysis = async (req, res) => {
 const apiKey = process.env.API_KEY_3;
 const genAI = new GoogleGenerativeAI(apiKey);
 
-const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: "Respond only to medical questions with brief, accurate answers that fit in a standard chatbot window. Provide factual information based on established medical knowledge, focusing on symptoms, conditions, treatments, and general health advice. Do not offer personalized diagnoses or treatment plans. For non-medical queries or requests for alternative treatments, politely explain that you're a medical information chatbot and can't assist with those topics. Always encourage users to consult a healthcare professional for personalized medical advice, especially for serious concerns. Keep responses concise, clear, and easy to read.",
-
-});
-
 const generationConfig = {
-    temperature: 0.0,
+    temperature: 0.2,
     topP: 0.9,
     topK: 50,
-    maxOutputTokens: 50,
+    maxOutputTokens: 1024,
     responseMimeType: 'text/plain',
 };
 
+async function geminiChat(systemInstruction, userMessage, history = []) {
+    const model = genAI.getGenerativeModel({
+        model: GEMINI_MODEL,
+        systemInstruction,
+    });
+    const chatSession = model.startChat({
+        generationConfig,
+        safety_settings,
+        history,
+    });
+    const result = await chatSession.sendMessage(userMessage);
+    return result.response
+        .text()
+        .replace(/\\/g, '')
+        .replace(/\*/g, '');
+}
+
 const chatbot = async (req, res) => {
-    const userMessage = req.body.message;
-    // console.log('User Message:', userMessage);
+    const userMessage = (req.body.message || '').trim();
+    const { patientId, patientName } = req.body;
+
+    if (!userMessage) {
+        return res.status(400).json({ error: 'message is required' });
+    }
 
     try {
-        const chatSession = await model.startChat({
-            generationConfig,
-            history: [],
-        });
+        if (patientId) {
+            try {
+                if (await ragClient.isAvailable()) {
+                    const ragResult = await ragClient.chat(
+                        patientId,
+                        userMessage,
+                        patientName
+                    );
+                    return res.json({
+                        reply: ragResult.answer,
+                        sources: ragResult.sources || [],
+                        patientAware: true,
+                        engine: 'langchain-rag',
+                    });
+                }
+            } catch (ragErr) {
+                console.error('RAG chat failed, falling back to Gemini:', ragErr.message);
+            }
 
-        const result = await chatSession.sendMessage(userMessage);
-        let botResponse = result.response.text();
+            const { documents } = await buildDocumentsForPatient(patientId);
+            const context = documents.map((d) => d.text).join('\n\n---\n\n');
+            const prompt = `Patient records:\n${context}\n\nQuestion: ${userMessage}`;
+            const reply = await geminiChat(PATIENT_AWARE_SYSTEM, prompt);
+            return res.json({
+                reply,
+                patientAware: true,
+                engine: 'gemini-context',
+            });
+        }
 
-
-        botResponse = botResponse.replace(/\\/g, ""); // Remove Markdown bold markers
-        botResponse = botResponse.replace(/\*/g, "");
-        // console.log('Bot Response:', botResponseString);
-
-        res.json({ reply: botResponse });
+        const reply = await geminiChat(GENERIC_SYSTEM, userMessage);
+        return res.json({ reply, patientAware: false, engine: 'gemini' });
     } catch (error) {
-        console.error('Error communicating with Gemini API:', error);
-        res.status(500).json({ error: 'Failed to communicate with Gemini API' });
+        console.error('Error in chatbot:', error);
+        return res.status(500).json({ error: 'Failed to generate chatbot response' });
     }
 };
 

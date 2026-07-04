@@ -3,3 +3,6 @@
 backend/.env
 .env
 *.env
+rag-service/chroma_data/
+rag-service/venv/
+__pycache__/

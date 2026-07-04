@@ -4,7 +4,7 @@ import Logo from "../Assets/Logo.svg";
 import { useNavigate, useParams } from 'react-router-dom';
 import jsPDF from 'jspdf'; // Import jspdf library
 import 'jspdf-autotable'; // Import autotable plugin
-import Caretaker from './Caretaker';
+import Chatbot from './Chatbot';
 
 
 export default function CaretakerAnalysis() {
@@ -175,6 +175,9 @@ export default function CaretakerAnalysis() {
           <p>Loading report details...</p>
         )}
       </div>
+      {patient && (
+        <Chatbot patientId={patient.patientId} patientName={patient.patient} />
+      )}
     </div>
   );
 }

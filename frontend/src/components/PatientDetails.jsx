@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Chatbot from './Chatbot';
 
 export default function PatientDetails(props) {
     const [patientData, setPatientData] = useState()
@@ -285,6 +286,7 @@ export default function PatientDetails(props) {
 
                 </main>
             </div>
+            <Chatbot patientId={id} patientName={patientData?.name} />
         </div>
     )
 }
